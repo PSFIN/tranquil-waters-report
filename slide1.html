@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tranquil Waters</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { width:100%; height:100%; overflow:hidden; background:#0d3d42; }
+  #scaler-wrap {
+    position:fixed; top:0; left:0; width:100vw; height:100vh;
+    overflow:hidden; display:flex; align-items:center; justify-content:center; background:#0d3d42;
+  }
+  #slide {
+    width:1400px; height:900px; transform-origin:center center;
+    position:relative; overflow:hidden;
+    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  }
+  .photo-bg {
+    position:absolute; top:0; left:0; width:100%; height:100%;
+    background: url('Images/original_167613061.jpeg') center 40% / cover no-repeat;
+  }
+  .gradient-overlay {
+    position:absolute; top:0; left:0; width:100%; height:100%;
+    background: linear-gradient(
+      100deg,
+      #1a5c63 0%, #1a5c63 30%,
+      rgba(26,92,99,0.94) 44%, rgba(26,92,99,0.72) 58%,
+      rgba(26,92,99,0.28) 76%, rgba(26,92,99,0.05) 100%
+    );
+  }
+  .bottom-vignette {
+    position:absolute; bottom:0; left:0; width:100%; height:220px;
+    background: linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 100%);
+    pointer-events:none;
+  }
+  .bg-svg {
+    position:absolute; top:0; left:0; width:100%; height:100%;
+    pointer-events:none; mix-blend-mode:multiply; opacity:0.35;
+  }
+  .logo-strip { position:absolute; top:32px; left:52px; }
+  .logo-rule {
+    position:absolute; top:106px; left:52px;
+    width:3px; height:64px; background:rgba(255,255,255,0.55); border-radius:2px;
+  }
+  .left {
+    position:absolute; left:52px; top:50%; transform:translateY(-50%);
+    margin-top:20px;
+  }
+  .left h1 {
+    color:#ffffff; font-size:78px; font-weight:900;
+    line-height:1.0; letter-spacing:1px; text-transform:uppercase;
+    text-shadow: 0 3px 14px rgba(0,0,0,0.35); margin-bottom:16px;
+  }
+  .left .period {
+    color:rgba(255,255,255,0.82); font-size:24px; font-weight:700;
+    letter-spacing:3px; text-transform:uppercase; margin-bottom:22px;
+  }
+  .left .year-row { display:flex; align-items:center; gap:14px; }
+  .left .yr {
+    color:#ffffff; font-size:54px; font-weight:900; letter-spacing:2px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3); line-height:1;
+  }
+  .left .yr-dot {
+    color:rgba(255,255,255,0.5); font-size:42px; font-weight:300; line-height:1;
+  }
+  .divider-h {
+    position:absolute; left:52px; bottom:112px;
+    width:380px; height:1.5px; background:rgba(255,255,255,0.25);
+  }
+  .tagline {
+    position:absolute; left:52px; bottom:76px;
+    color:rgba(255,255,255,0.65); font-size:13px; font-weight:500;
+    letter-spacing:2px; text-transform:uppercase;
+  }
+</style>
+</head>
+<body>
+<div id="scaler-wrap">
+<div id="slide">
+  <div class="photo-bg"></div>
+  <div class="gradient-overlay"></div>
+  <div class="bottom-vignette"></div>
+  <svg class="bg-svg" viewBox="0 0 1400 900" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(1400,0)" fill="#0d3d42" opacity="0.9">
+      <path d="M0,0 C-5,-50 -10,-130 0,-250 C10,-130 5,-50 0,0" transform="rotate(90)"/>
+      <path d="M0,0 C-6,-55 -14,-150 -4,-290 C10,-145 8,-52 0,0" transform="rotate(78)"/>
+      <path d="M0,0 C-6,-60 -16,-160 -6,-315 C12,-155 8,-56 0,0" transform="rotate(66)"/>
+      <path d="M0,0 C-7,-65 -18,-170 -8,-335 C14,-162 9,-60 0,0" transform="rotate(54)"/>
+      <path d="M0,0 C-7,-68 -20,-182 -8,-355 C15,-168 9,-62 0,0" transform="rotate(42)"/>
+      <path d="M0,0 C-7,-68 -20,-188 -8,-365 C15,-170 9,-63 0,0" transform="rotate(30)"/>
+      <path d="M0,0 C-7,-65 -18,-178 -6,-348 C14,-165 8,-60 0,0" transform="rotate(18)"/>
+      <path d="M0,0 C-6,-60 -16,-168 -4,-328 C12,-158 8,-56 0,0" transform="rotate(6)"/>
+    </g>
+  </svg>
+
+  <!-- Property logo -->
+  <div class="logo-strip" style="display:flex;align-items:center;gap:14px;">
+    <img src="Images/logo.jpg" alt="Tranquil Waters" style="height:58px;width:58px;border-radius:50%;object-fit:cover;box-shadow:0 3px 12px rgba(0,0,0,0.35);">
+    <svg height="52" viewBox="0 0 340 52" xmlns="http://www.w3.org/2000/svg">
+      <text x="0" y="36" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif"
+        font-size="32" font-weight="900" fill="#ffffff" letter-spacing="2" opacity="0.95">TRANQUIL WATERS</text>
+    </svg>
+  </div>
+  <div class="logo-rule"></div>
+
+  <div class="left">
+    <h1>PROPERTY<br>PERFORMANCE<br>REPORT</h1>
+    <div class="period">Annual Overview</div>
+    <div class="year-row">
+      <span class="yr">2024</span>
+      <span class="yr-dot">&middot;</span>
+      <span class="yr">2025</span>
+      <span class="yr-dot">&middot;</span>
+      <span class="yr">2026 <span style="font-size:28px;font-weight:700;opacity:0.75;">(Q1)</span></span>
+    </div>
+  </div>
+
+  <div class="divider-h"></div>
+  <div class="tagline">Tranquil Waters &nbsp;&middot;&nbsp; KeyData Analytics</div>
+</div></div>
+
+<div id="fixed-nav" style="position:fixed;bottom:22px;left:0;right:0;padding:0 28px;z-index:9999;display:flex;justify-content:flex-end;pointer-events:none;">
+  <span style="pointer-events:auto;">
+    <a href="slide2.html" style="background:#1a6870;color:white;text-decoration:none;border-radius:16px;padding:9px 22px;font-size:13px;font-weight:700;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;box-shadow:0 2px 8px rgba(0,0,0,0.25);">Next &#8594;</a>
+  </span>
+</div>
+
+<script>
+function scaleSlide() {
+  var vp = window.visualViewport;
+  var w = vp ? vp.width : document.documentElement.clientWidth;
+  var h = vp ? vp.height : document.documentElement.clientHeight;
+  document.getElementById('slide').style.transform = 'scale(' + Math.min(w/1400, h/900) + ')';
+}
+scaleSlide();
+window.addEventListener('resize', scaleSlide);
+if (window.visualViewport) window.visualViewport.addEventListener('resize', scaleSlide);
+</script>
+</body>
+</html>

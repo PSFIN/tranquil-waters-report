@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tranquil Waters – 2025 Performance</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #0d3d42; }
+  #scaler-wrap {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    overflow: hidden; display: flex; align-items: center; justify-content: center; background: #0d3d42;
+  }
+  #slide {
+    width: 1400px; height: 900px; transform-origin: center center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f0f2f5; display: flex; flex-direction: column; overflow: hidden; flex-shrink: 0;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: #0d3d42; height: 58px; display: flex; align-items: center;
+    padding: 0 20px; gap: 14px; border-bottom: 2px solid rgba(255,255,255,0.07); flex-shrink: 0;
+  }
+  .header .hdr-logo { flex-shrink: 0; }
+  .header .hdr-rule { width: 2px; height: 32px; background: rgba(255,255,255,0.22); border-radius: 1px; flex-shrink: 0; }
+  .header .hdr-info { flex: 1; min-width: 0; }
+  .header .hdr-title { color: #fff; font-size: 14.5px; font-weight: 800; letter-spacing: 0.4px; }
+  .header .hdr-sub { color: rgba(255,255,255,0.48); font-size: 10px; margin-top: 2px; }
+  .header .hdr-legend { display: flex; align-items: center; gap: 16px; flex-shrink: 0; margin-right: 8px; }
+  .header .hdr-leg-item { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.75); }
+  .header .leg-line-solid { width: 26px; height: 3px; background: #1a6870; border-radius: 2px; }
+  .header .leg-line-dash  { width: 26px; height: 0; border-top: 2.5px dashed #e8791a; }
+  .header .hdr-badge {
+    flex-shrink: 0; background: rgba(255,255,255,0.09); border: 1px solid rgba(255,255,255,0.22);
+    border-radius: 20px; padding: 4px 14px; color: rgba(255,255,255,0.75);
+    font-size: 11px; font-weight: 800; letter-spacing: 3px;
+  }
+
+  /* ── Layout ── */
+  .layout { display: flex; gap: 10px; padding: 8px; flex: 1; min-height: 0; }
+
+  /* ── KPI cards (LEFT) ── */
+  .cards-side { width: 272px; flex-shrink: 0; display: flex; flex-direction: column; gap: 8px; min-height: 0; }
+  .kpi-card {
+    background: white; border-radius: 10px; border: 1px solid #e0e4ea;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06); overflow: hidden; flex: 1;
+    display: flex; flex-direction: column;
+  }
+  .kpi-card-title {
+    text-align: center; padding: 9px 12px 7px; font-size: 11.5px; font-weight: 700;
+    color: #4a5568; border-bottom: 1px solid #eaeff4; letter-spacing: 0.2px; flex-shrink: 0;
+  }
+  .kpi-half { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 6px 8px; }
+  .kpi-lbl { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; color: #9aabb8; text-transform: uppercase; }
+  .kpi-num { font-size: 28px; font-weight: 900; line-height: 1.1; margin-top: 2px; }
+  .kpi-p { color: #1a6870; }
+  .kpi-c { color: #e8791a; }
+  .kpi-sep { height: 1px; background: #eaeff4; flex-shrink: 0; margin: 0 14px; }
+  .kpi-mid {
+    height: 32px; flex-shrink: 0; display: flex; align-items: center;
+    justify-content: center; gap: 5px; font-size: 13px; font-weight: 800;
+  }
+  .up   { color: #27ae60; }
+  .down { color: #e74c3c; }
+
+  /* ── Charts (RIGHT) ── */
+  .charts-side { flex: 1; display: flex; flex-direction: column; gap: 6px; min-height: 0; }
+  .chart-card {
+    background: white; border-radius: 8px; border: 1px solid #e0e4ea;
+    padding: 8px 14px 6px; box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    display: flex; flex-direction: column; flex: 1; min-height: 0;
+  }
+  .chart-title { text-align: center; font-size: 13px; font-weight: 700; color: #1a2a3a; margin-bottom: 3px; flex-shrink: 0; }
+  .chart-legend {
+    display: flex; align-items: center; gap: 12px; justify-content: center;
+    margin-bottom: 3px; font-size: 10px; color: #444; flex-shrink: 0;
+  }
+  .legend-swatch-area {
+    width: 24px; height: 12px; background: rgba(26,104,112,0.13);
+    border: 2px solid #1a6870; border-radius: 2px; display: inline-block; flex-shrink: 0;
+  }
+  .legend-swatch-dash {
+    width: 24px; height: 0; border-top: 2.5px dashed #e8791a;
+    display: inline-block; flex-shrink: 0; margin-top: 5px;
+  }
+  .chart-wrap { position: relative; flex: 1; min-height: 0; }
+
+  /* ── Footer ── */
+  .footer {
+    background: #ffffff; display: flex; align-items: center; padding: 0 18px;
+    justify-content: space-between; border-top: 1px solid #dde3ea;
+    height: 28px; flex-shrink: 0; font-size: 9px; color: #9aabb8;
+  }
+</style>
+</head>
+<body>
+<div id="scaler-wrap">
+<div id="slide">
+
+<!-- Header -->
+<div class="header">
+  <div class="hdr-logo" style="display:flex;align-items:center;gap:10px;">
+    <img src="Images/logo.jpg" alt="Tranquil Waters" style="height:38px;width:38px;border-radius:50%;object-fit:cover;box-shadow:0 2px 8px rgba(0,0,0,0.35);">
+    <svg height="34" viewBox="0 0 260 34" xmlns="http://www.w3.org/2000/svg">
+      <text x="0" y="24" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif"
+        font-size="20" font-weight="900" fill="#ffffff" letter-spacing="1.5" opacity="0.92">TRANQUIL WATERS</text>
+    </svg>
+  </div>
+  <div class="hdr-rule"></div>
+  <div class="hdr-info">
+    <div class="hdr-title">2025 Annual Performance &ndash; Tranquil Waters</div>
+    <div class="hdr-sub">ADR &nbsp;&middot;&nbsp; Occupancy &nbsp;&middot;&nbsp; Unit Revenue (Recognized) &nbsp;&middot;&nbsp; Full Year 2025 vs 2024</div>
+  </div>
+  <div class="hdr-legend">
+    <div class="hdr-leg-item"><div class="leg-line-solid"></div>2025</div>
+    <div class="hdr-leg-item"><div class="leg-line-dash"></div>2024</div>
+  </div>
+  <div class="hdr-badge">2024 VS 2025</div>
+</div>
+
+<!-- Main layout -->
+<div class="layout">
+
+  <!-- LEFT: KPI scorecards -->
+  <div class="cards-side">
+
+    <div class="kpi-card">
+      <div class="kpi-card-title">ADR</div>
+      <div class="kpi-half"><div class="kpi-lbl">2025</div><div class="kpi-num kpi-p">$132</div></div>
+      <div class="kpi-sep"></div>
+      <div class="kpi-mid up">▲ +25%</div>
+      <div class="kpi-sep"></div>
+      <div class="kpi-half"><div class="kpi-lbl">2024</div><div class="kpi-num kpi-c">$106</div></div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-card-title">Adjusted Paid Occupancy %</div>
+      <div class="kpi-half"><div class="kpi-lbl">2025</div><div class="kpi-num kpi-p">72%</div></div>
+      <div class="kpi-sep"></div>
+      <div class="kpi-mid up">▲ +11%</div>
+      <div class="kpi-sep"></div>
+      <div class="kpi-half"><div class="kpi-lbl">2024</div><div class="kpi-num kpi-c">64%</div></div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-card-title">Unit Revenue (Recognized)</div>
+      <div class="kpi-half"><div class="kpi-lbl">2025</div><div class="kpi-num kpi-p">$38K</div></div>
+      <div class="kpi-sep"></div>
+      <div class="kpi-mid up">▲ +68%</div>
+      <div class="kpi-sep"></div>
+      <div class="kpi-half"><div class="kpi-lbl">2024</div><div class="kpi-num kpi-c">$22K</div></div>
+    </div>
+
+  </div><!-- /cards-side -->
+
+  <!-- RIGHT: Line charts -->
+  <div class="charts-side">
+
+    <div class="chart-card">
+      <div class="chart-title">ADR</div>
+      <div class="chart-legend">
+        <span class="legend-swatch-area"></span>
+        <span>2025 &nbsp;|&nbsp; <strong>$132 avg</strong></span>
+        <span class="legend-swatch-dash"></span>
+        <span>2024 &nbsp;|&nbsp; <strong>$106 avg</strong></span>
+      </div>
+      <div class="chart-wrap"><canvas id="adrChart"></canvas></div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title">Adjusted Paid Occupancy %</div>
+      <div class="chart-legend">
+        <span class="legend-swatch-area"></span>
+        <span>2025 &nbsp;|&nbsp; <strong>72% avg</strong></span>
+        <span class="legend-swatch-dash"></span>
+        <span>2024 &nbsp;|&nbsp; <strong>64% avg</strong></span>
+      </div>
+      <div class="chart-wrap"><canvas id="occChart"></canvas></div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title">Unit Revenue (Recognized)</div>
+      <div class="chart-legend">
+        <span class="legend-swatch-area"></span>
+        <span>2025 &nbsp;|&nbsp; <strong>$37,525 total</strong></span>
+        <span class="legend-swatch-dash"></span>
+        <span>2024 &nbsp;|&nbsp; <strong>$22,288 total</strong></span>
+      </div>
+      <div class="chart-wrap"><canvas id="revChart"></canvas></div>
+    </div>
+
+  </div><!-- /charts-side -->
+
+</div><!-- /layout -->
+
+<div class="footer">
+  <span>Source: KeyData Analytics &nbsp;|&nbsp; Tranquil Waters &nbsp;|&nbsp; Monthly Scale &nbsp;|&nbsp; Full Year 2025 vs 2024</span>
+  <span>Generated 5/6/2026</span>
+</div>
+
+<script>
+Chart.register(ChartDataLabels);
+
+const labels25 = ['1/25','2/25','3/25','4/25','5/25','6/25','7/25','8/25','9/25','10/25','11/25','12/25'];
+const labels24 = ['1/24','2/24','3/24','4/24','5/24','6/24','7/24','8/24','9/24','10/24','11/24','12/24'];
+
+const adr25 = [189.05, 237.50, 237.50, 84.15, 75.65, 66.77, 66.77, 0.0, 0.0, 99.70, 99.70, 99.70];
+const adr24 = [111.20, 239.64, 235.50, 82.03, 82.02, 63.20, 63.20, 0.0, 0.0, 0.0, 0.0, 0.0];
+
+const occ25 = [96.8, 100.0, 96.8, 96.7, 96.8, 23.3, 74.2, 0.0, 0.0, 74.2, 100.0, 100.0];
+const occ24 = [96.8, 96.6, 96.8, 100.0, 32.3, 20.0, 77.4, 74.2, 100.0, 0.0, 0.0, 0.0];
+
+const rev25 = [5671.50, 13775.00, 0.0, 2440.35, 2269.50, 2002.95, 0.0, 0.0, 0.0, 11365.74, 0.0, 0.0];
+const rev24 = [3336.00, 6710.00, 7065.00, 3281.00, 0.0, 1896.00, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
+
+const BLUE      = '#1a6870';
+const BLUE_FILL = 'rgba(26,104,112,0.10)';
+const ORANGE    = '#e8791a';
+
+function makeChart(canvasId, dataCurr, dataPrior, fmtY, lblFnCurr, lblFnPrior) {
+  return new Chart(document.getElementById(canvasId), {
+    type: 'line',
+    data: {
+      labels: labels25,
+      datasets: [
+        {
+          data: dataCurr,
+          borderColor: BLUE, borderWidth: 2.2, backgroundColor: BLUE_FILL,
+          fill: true, tension: 0.35,
+          pointBackgroundColor: BLUE, pointBorderColor: BLUE, pointRadius: 3.5,
+          order: 1, xAxisID: 'x',
+          datalabels: {
+            display: ctx => dataCurr[ctx.dataIndex] > 0,
+            align: 'top', offset: 3,
+            backgroundColor: BLUE, borderRadius: 3, color: 'white',
+            font: { weight: 'bold', size: 9 },
+            padding: { top: 2, bottom: 2, left: 4, right: 4 },
+            formatter: lblFnCurr
+          }
+        },
+        {
+          data: dataPrior,
+          borderColor: ORANGE, borderWidth: 2, borderDash: [5, 4],
+          backgroundColor: 'transparent', fill: false, tension: 0.35,
+          pointBackgroundColor: 'white', pointBorderColor: ORANGE, pointBorderWidth: 1.5, pointRadius: 3,
+          order: 2, xAxisID: 'x2',
+          datalabels: {
+            display: ctx => dataPrior[ctx.dataIndex] > 0,
+            align: 'bottom', offset: 3,
+            backgroundColor: ORANGE, borderRadius: 3, color: 'white',
+            font: { weight: 'bold', size: 9 },
+            padding: { top: 2, bottom: 2, left: 4, right: 4 },
+            formatter: lblFnPrior
+          }
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, animation: false,
+      layout: { padding: { top: 22, right: 8, bottom: 18, left: 2 } },
+      plugins: { legend: { display: false }, tooltip: { enabled: true } },
+      scales: {
+        x: {
+          position: 'bottom',
+          grid: { color: '#f0f0f0', drawBorder: false },
+          ticks: { color: BLUE, font: { size: 9, weight: '600' }, maxRotation: 0, padding: 1 }
+        },
+        x2: {
+          type: 'category', labels: labels24, position: 'bottom', offset: false,
+          grid: { drawOnChartArea: false, drawBorder: false, drawTicks: false },
+          ticks: { color: ORANGE, font: { size: 8.5 }, maxRotation: 0, padding: 0 }
+        },
+        y: {
+          grid: { color: '#f0f0f0', drawBorder: false },
+          ticks: { color: '#999', font: { size: 9 }, callback: fmtY, maxTicksLimit: 5 },
+          beginAtZero: true
+        }
+      }
+    }
+  });
+}
+
+const fmtUSD  = v => v === 0 ? '' : `$${Math.round(v)}`;
+const fmtPct  = v => v === 0 ? '' : `${Math.round(v)}%`;
+const fmtRevY = v => v === 0 ? '' : (v >= 1000 ? `$${(v/1000).toFixed(1)}K` : `$${Math.round(v)}`);
+
+makeChart('adrChart', adr25, adr24, fmtUSD,  fmtUSD,  fmtUSD);
+makeChart('occChart', occ25, occ24, fmtPct,  fmtPct,  fmtPct);
+makeChart('revChart', rev25, rev24, fmtRevY, fmtRevY, fmtRevY);
+
+function scaleSlide() {
+  var vp = window.visualViewport;
+  var w = vp ? vp.width : document.documentElement.clientWidth;
+  var h = vp ? vp.height : document.documentElement.clientHeight;
+  document.getElementById('slide').style.transform = 'scale(' + Math.min(w/1400, h/900) + ')';
+}
+scaleSlide();
+window.addEventListener('resize', scaleSlide);
+if (window.visualViewport) window.visualViewport.addEventListener('resize', scaleSlide);
+</script>
+
+</div></div>
+
+<div id="fixed-nav" style="position:fixed;bottom:22px;left:0;right:0;padding:0 28px;z-index:9999;display:flex;justify-content:space-between;pointer-events:none;">
+  <span style="pointer-events:auto;"><a href="slide1.html" style="background:#1a6870;color:white;text-decoration:none;border-radius:16px;padding:9px 22px;font-size:13px;font-weight:700;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;box-shadow:0 2px 8px rgba(0,0,0,0.25);">&#8592; Prev</a></span>
+  <span style="pointer-events:auto;"><a href="slide3.html" style="background:#1a6870;color:white;text-decoration:none;border-radius:16px;padding:9px 22px;font-size:13px;font-weight:700;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;box-shadow:0 2px 8px rgba(0,0,0,0.25);">Next &#8594;</a></span>
+</div>
+
+</body>
+</html>
